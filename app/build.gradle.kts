@@ -49,6 +49,7 @@ android {
 
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.runtime.compose)
@@ -77,6 +78,11 @@ dependencies {
     // Imágenes: Coil las baja y las pinta, con el mismo cliente que todo lo demás
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
+
+    // Imágenes: Coil las baja y las pinta; ExifInterface lee cómo venía girada la foto
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
+    implementation(libs.androidx.exifinterface)
 
     debugImplementation(libs.androidx.ui.tooling)
 }

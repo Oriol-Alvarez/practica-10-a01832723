@@ -1,5 +1,8 @@
 package mx.tec.avisos.ui.navigation
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.LifecycleStartEffect
@@ -45,13 +48,21 @@ fun AvisosNavHost(sesion: Sesion, onSalir: () -> Unit) {
 
         composable(Route.PUBLICAR) {
             val viewModel: PublicarViewModel = hiltViewModel()
-
+            // El selector de fotos del sistema: no pide permiso, porque el usuario elige
+            // y la app solo recibe esa imagen. Devuelve null si el usuario se arrepiente.
+            val galeria = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+                if (uri != null) viewModel.onImagenElegida(uri)
+            }
             PublicarScreen(
                 uiState = viewModel.uiState,
                 // Para la vista previa: el aviso sale firmado por quien tiene la sesión.
                 autor = sesion.usuario,
                 onTituloChange = viewModel::onTituloChange,
                 onCuerpoChange = viewModel::onCuerpoChange,
+                onGaleria = {
+                    galeria.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                },
+                onQuitarImagen = viewModel::quitarImagen,
                 // El popBackStack ocurre cuando el servidor aceptó, no antes.
                 onPublicar = { viewModel.publicar { nav.popBackStack() } },
                 onCancelar = { nav.popBackStack() }
