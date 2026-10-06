@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Las carpetas que FileProvider puede prestar a otra app. Solo una: files/fotos/,
+  la de FotosTemporales. Todo lo demás de la app sigue siendo privado.
+-->
+<paths>
+    <files-path name="fotos" path="fotos/" />
+</paths>

@@ -10,6 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import mx.tec.avisos.data.AvisosRepository
 import mx.tec.avisos.data.ImagenesRepository
+import mx.tec.avisos.data.imagenes.FotosTemporales
 import mx.tec.avisos.data.imagenes.ImagenIlegible
 import mx.tec.avisos.domain.AvisoValidator
 import retrofit2.HttpException
@@ -37,7 +38,8 @@ data class PublicarUiState(
 @HiltViewModel
 class PublicarViewModel @Inject constructor(
     private val avisos: AvisosRepository,
-    private val imagenes: ImagenesRepository
+    private val imagenes: ImagenesRepository,
+    private val fotos: FotosTemporales
 ) : ViewModel() {
 
     var uiState by mutableStateOf(PublicarUiState())
@@ -59,6 +61,9 @@ class PublicarViewModel @Inject constructor(
         uiState = uiState.copy(imagen = null, error = null)
     }
 
+    /** Dónde va a escribir la cámara. Lo crea quien sabe de archivos, no la pantalla. */
+    fun nuevaFoto(): Uri = fotos.nueva()
+
     /** `alTerminar` se llama solo si el servidor aceptó el aviso. Un error se queda a la vista. */
     fun publicar(alTerminar: () -> Unit) {
         if (!uiState.puedePublicar) return
@@ -74,6 +79,7 @@ class PublicarViewModel @Inject constructor(
                 }
                 uiState = uiState.copy(etapa = "Publicando…", error = null)
                 avisos.publicar(uiState.titulo, uiState.cuerpo, clave)
+                fotos.limpiar()
                 uiState = uiState.copy(etapa = null)
                 alTerminar()
             } catch (e: ImagenIlegible) {

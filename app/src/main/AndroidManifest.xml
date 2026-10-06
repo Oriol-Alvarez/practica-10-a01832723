@@ -28,19 +28,18 @@
         </activity>
 
         <!--
-          WorkManager se arranca solo con su configuración por omisión, que no sabe
-          inyectar dependencias en los workers. Se apaga ese arranque y la
-          configuración la da AvisosApplication, con la fábrica de Hilt.
+          Le presta a la cámara un archivo de esta app para que escriba la foto.
+          La autoridad es el nombre con que se piden las direcciones (FotosTemporales);
+          exported="false" + grantUriPermissions: nadie entra, salvo a quien se le preste.
         -->
         <provider
-            android:name="androidx.startup.InitializationProvider"
-            android:authorities="${applicationId}.androidx-startup"
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fotos"
             android:exported="false"
-            tools:node="merge">
+            android:grantUriPermissions="true">
             <meta-data
-                android:name="androidx.work.WorkManagerInitializer"
-                android:value="androidx.startup"
-                tools:node="remove" />
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/rutas_de_fotos" />
         </provider>
     </application>
 </manifest>
