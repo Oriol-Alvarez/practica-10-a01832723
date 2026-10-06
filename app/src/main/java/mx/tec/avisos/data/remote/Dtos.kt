@@ -37,8 +37,9 @@ data class AvisoDto(
     val titulo: String,
     val cuerpo: String,
     val autor: String,
-    val createdAt: String
+    val createdAt: String,
+    /** La clave de la imagen en el servidor ("3f2a….jpg"), o null si el aviso no lleva. */
+    val imagen: String? = null
 )
-
 @Serializable
 data class NuevoAvisoBody(val titulo: String, val cuerpo: String)

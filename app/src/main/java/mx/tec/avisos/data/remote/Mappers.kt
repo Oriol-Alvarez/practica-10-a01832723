@@ -21,5 +21,7 @@ fun AvisoDto.toDomain() = Aviso(
     titulo = titulo,
     cuerpo = cuerpo,
     autor = autor,
-    creadoEn = createdAt
+    creadoEn = createdAt,
+    // El servidor da la clave; la dirección completa la arma la app, que sabe a qué servidor habla.
+    imagenUrl = imagen?.let { "${Network.BASE_URL}imagenes/$it" }
 )

@@ -1,6 +1,9 @@
 package mx.tec.avisos
 
 import android.app.Application
+import coil3.ImageLoader
+import coil3.PlatformContext
+import coil3.SingletonImageLoader
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import dagger.hilt.android.HiltAndroidApp
@@ -17,16 +20,23 @@ import javax.inject.Inject
  * `Configuration.Provider`: WorkManager construye los workers, y por omisión
  * no sabe inyectarles nada. Con la fábrica de Hilt, sí. Por eso el manifiesto
  * apaga el arranque automático de WorkManager.
+ *
+ * `SingletonImageLoader.Factory`: lo mismo con Coil. Cada `AsyncImage` de la
+ * app pide "el" ImageLoader, y aquí se le entrega el que armó Hilt.
  */
 @HiltAndroidApp
-class AvisosApplication : Application(), Configuration.Provider {
+class AvisosApplication : Application(), Configuration.Provider, SingletonImageLoader.Factory {
 
     @Inject lateinit var workerFactory: HiltWorkerFactory
+
+    @Inject lateinit var imageLoader: ImageLoader
 
     @Inject lateinit var notificador: Notificador
 
     override val workManagerConfiguration: Configuration
         get() = Configuration.Builder().setWorkerFactory(workerFactory).build()
+
+    override fun newImageLoader(context: PlatformContext): ImageLoader = imageLoader
 
     override fun onCreate() {
         super.onCreate()
