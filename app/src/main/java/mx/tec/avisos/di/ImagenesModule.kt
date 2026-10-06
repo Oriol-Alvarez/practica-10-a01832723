@@ -2,7 +2,6 @@ package mx.tec.avisos.di
 
 import android.content.Context
 import coil3.ImageLoader
-import coil3.network.okhttp.OkHttpNetworkFetcherFactory
 import coil3.request.crossfade
 import dagger.Module
 import dagger.Provides
@@ -29,7 +28,6 @@ object ImagenesModule {
     @Singleton
     fun imageLoader(@ApplicationContext context: Context, cliente: OkHttpClient): ImageLoader =
         ImageLoader.Builder(context)
-            .components { add(OkHttpNetworkFetcherFactory(callFactory = { cliente })) }
             .crossfade(true)
             .build()
 }
