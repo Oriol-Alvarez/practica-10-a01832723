@@ -88,7 +88,7 @@ class CompresorDeImagen @Inject constructor(@ApplicationContext private val cont
 
     private companion object {
         const val TAG = "Compresor"
-        const val LADO_MAX = 1280
-        const val CALIDAD = 80
+        const val LADO_MAX = 8000
+        const val CALIDAD = 100
     }
 }
